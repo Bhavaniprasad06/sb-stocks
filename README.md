@@ -1,53 +1,68 @@
 # SB Stocks 📈
 
-A full-stack **paper trading** platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js). Users practice buying and selling US stocks with **virtual money** — no financial risk — while tracking portfolio performance with interactive charts.
+A full-stack **paper trading** platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js). Users practice buying and selling US stocks with **virtual money** — no financial risk — while tracking portfolio performance with interactive charts and real-time market data.
+
+---
 
 ## ✨ Features
 
-- 🔐 **Secure authentication** — JWT-based login/registration, bcrypt-hashed passwords, role-based access (`user` / `admin`)
-- 💵 **Virtual trading** — each new user starts with **$100,000** in play money
-- 📊 **Markets** — browse/search 40+ popular US stock listings with sector filters, sorting and pagination
-- 📈 **Charts** — price history and account performance visualizations via Chart.js
-- 💼 **Portfolio** — live valuation, cost basis, unrealized gain/loss, performance curve
+- 🔐 **Secure Authentication** — JWT-based login/registration, bcrypt-hashed passwords, role-based access (`user` / `admin`)
+- 💵 **Virtual Trading** — each new user starts with **$300,000** in virtual cash
+- 📊 **Real-Time Market Data** — live US stock prices powered by Yahoo Finance, auto-updated every 5 minutes
+- 📈 **Interactive Charts** — Chart.js price history with SMA 20/50 overlays, volume bars, and multiple timeframes (1D – ALL)
+- 📰 **Market Overview Dashboard** — selectable stock tabs (AAPL, MSFT, NVDA, TSLA, AMZN, GOOGL, META) with live price graphs
+- 💼 **Portfolio Management** — live valuation, cost basis, unrealized gain/loss, and performance tracking
 - ⭐ **Watchlist** — follow stocks and trade them in one click
-- 🧑‍💼 **Admin panel** — create, edit price, and deactivate stock listings
-- 📱 **Responsive UI** — dark trading theme, works on desktop and mobile
+- 📜 **Transaction History** — full log of all buy/sell activities with filtering and search
+- 🌗 **Dark / Light Themes** — persistent theme toggle with flash-prevention
+- 🧑‍💼 **Admin Panel** — manage stocks, view user accounts, monitor transactions, and track platform stats
+- 📱 **Responsive UI** — works seamlessly on desktop and mobile
+
+---
 
 ## 🧱 Tech Stack
 
-| Layer     | Technology                                                        |
-| --------- | ----------------------------------------------------------------- |
-| Frontend  | React 18, Vite, Redux Toolkit, React Router, Chart.js, Toastify   |
-| Backend   | Node.js, Express.js, Mongoose (ODM)                               |
-| Database  | MongoDB                                                           |
-| Auth      | JSON Web Tokens, bcryptjs                                         |
+| Layer | Technology |
+| --- | --- |
+| Frontend | React 18, Vite, Redux Toolkit, React Router, Chart.js, React-Toastify |
+| Backend | Node.js, Express.js, Mongoose (ODM) |
+| Database | MongoDB |
+| Auth | JSON Web Tokens (JWT), bcryptjs |
+| Market Data | Yahoo Finance API, node-cron (auto-refresh) |
+
+---
 
 ## 📁 Project Structure
 
 ```
-stock-trading-app/
-├── server/                    # Express + MongoDB backend
-│   ├── config/db.js           # MongoDB connection
-│   ├── models/                # User, Stock, Portfolio, Transaction, Watchlist
-│   ├── controllers/           # Business logic per resource
-│   ├── routes/                # API route definitions
-│   ├── middleware/            # JWT auth, admin guard, error handler
-│   ├── seed/seedStocks.js     # Seeds 40+ stocks with 90-day price history
-│   ├── server.js              # Server entry point
-│   └── .env.example           # Environment template
-└── client/                    # React + Vite frontend
+sb-stocks/
+├── server/                        # Express + MongoDB backend
+│   ├── config/db.js               # MongoDB connection
+│   ├── models/                    # User, Stock, Portfolio, Transaction, Watchlist
+│   ├── controllers/               # Business logic (auth, stocks, trades, admin)
+│   ├── routes/                    # REST API routes
+│   ├── middleware/                 # JWT auth, admin guard, error handler
+│   ├── services/marketService.js  # Yahoo Finance integration + cron scheduler
+│   ├── seed/seedStocks.js         # Seeds 40+ US stocks with 90-day price history
+│   ├── server.js                  # Server entry point
+│   └── .env.example               # Environment template
+│
+└── client/                        # React + Vite frontend
     └── src/
-        ├── api/client.js      # Axios instance (JWT interceptor)
-        ├── redux/             # Redux store + slices (auth, stocks, portfolio…)
-        ├── components/        # Navbar, StockTable, TradeModal, PriceChart…
-        └── pages/             # Home, Login, Register, Dashboard, Markets…
+        ├── api/client.js          # Axios instance with JWT interceptor
+        ├── redux/                 # Redux store + slices (auth, stocks, portfolio…)
+        ├── components/            # Navbar, StockTable, TradeModal, LivePriceChart…
+        ├── pages/                 # Home, Login, Register, Dashboard, Markets…
+        └── index.css              # Global styles + dark/light theme variables
 ```
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js **v16+** (tested on v24)
+- Node.js **v16+**
 - npm **v8+**
 - MongoDB running locally (`mongod`) or a MongoDB Atlas connection string
 
@@ -55,10 +70,10 @@ stock-trading-app/
 
 ```bash
 cd server
-cp .env.example .env        # edit values as needed
+cp .env.example .env          # edit values as needed
 npm install
-npm run seed                # populate stocks (optional but recommended)
-npm run dev                 # starts on http://localhost:5000
+npm run seed                  # populate 40+ stocks with price history
+npm run dev                   # starts on http://localhost:5000
 ```
 
 ### 2. Frontend
@@ -66,52 +81,103 @@ npm run dev                 # starts on http://localhost:5000
 ```bash
 cd client
 npm install
-npm run dev                 # starts on http://localhost:5173
+npm run dev                   # starts on http://localhost:5174
 ```
 
-Open **http://localhost:5173** — the Vite dev server proxies `/api` to the backend, so no extra CORS config is needed.
+Open **http://localhost:5174** — the Vite dev server proxies `/api` to the backend automatically.
 
-### Default accounts
+### Default Accounts
 
-| Role  | Email                  | Password   |
-| ----- | ---------------------- | ---------- |
-| Admin | `admin@sbstocks.com`   | `admin123` |
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@sbstocks.com` | `admin123` |
 
-The admin account is created automatically on server start. Regular users register from the UI (they receive $100,000 virtual cash).
+The admin account is created automatically on server start. Regular users register from the UI and receive **$300,000** in virtual cash.
 
-## 🔌 API Overview
+---
 
-| Method | Endpoint                 | Access  | Description                       |
-| ------ | ------------------------ | ------- | --------------------------------- |
-| POST   | `/api/auth/register`     | Public  | Create account (returns JWT)      |
-| POST   | `/api/auth/login`        | Public  | Log in (returns JWT)              |
-| GET    | `/api/auth/me`           | Private | Current user                      |
-| GET    | `/api/stocks`            | Public  | List stocks (search/filter/sort)  |
-| GET    | `/api/stocks/:id`        | Public  | Single stock (id or symbol)       |
-| GET    | `/api/stocks/meta/movers`| Public  | Top gainers / losers / active     |
-| POST   | `/api/stocks`            | Admin   | Create stock                      |
-| PUT    | `/api/stocks/:id`        | Admin   | Update stock (price → change)     |
-| DELETE | `/api/stocks/:id`        | Admin   | Deactivate stock                  |
-| POST   | `/api/transactions/buy`  | Private | Buy shares (atomic)               |
-| POST   | `/api/transactions/sell` | Private | Sell shares (atomic)              |
-| GET    | `/api/transactions`      | Private | Transaction history               |
-| GET    | `/api/portfolio`         | Private | Holdings + valuation summary      |
-| GET    | `/api/portfolio/performance` | Private | Daily account value series    |
-| GET    | `/api/watchlist`         | Private | User watchlist                    |
-| POST   | `/api/watchlist/:stockId`| Private | Add to watchlist                  |
-| DELETE | `/api/watchlist/:stockId`| Private | Remove from watchlist             |
+## 🔌 API Endpoints
 
-All private routes require `Authorization: Bearer <token>`.
+### Authentication
 
-## 🧪 Testing with Postman
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| POST | `/api/auth/register` | Public | Create account (returns JWT) |
+| POST | `/api/auth/login` | Public | Log in (returns JWT) |
+| GET | `/api/auth/me` | Private | Get current user |
+| PUT | `/api/auth/profile` | Private | Update name / contact |
 
-1. `POST /api/auth/register` or `/login` → copy the `token` from the response.
-2. Add header `Authorization: Bearer <token>` to protected requests.
-3. Try buying: `POST /api/transactions/buy` with `{ "stockId": "<id>", "shares": 10 }`.
-4. Verify the portfolio: `GET /api/portfolio`.
+### Stocks
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| GET | `/api/stocks` | Public | List stocks (search, filter, sort, pagination) |
+| GET | `/api/stocks/:id` | Public | Single stock by ID or symbol |
+| GET | `/api/stocks/:id/history` | Public | Price history with SMA 20/50 overlays |
+| GET | `/api/stocks/live` | Public | Batch live prices for all stocks |
+| GET | `/api/stocks/meta/movers` | Public | Top gainers, losers, most active |
+| GET | `/api/stocks/meta/sectors` | Public | Available sector list |
+| POST | `/api/stocks` | Admin | Create stock |
+| PUT | `/api/stocks/:id` | Admin | Update stock |
+| DELETE | `/api/stocks/:id` | Admin | Deactivate stock |
+
+### Transactions
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| POST | `/api/transactions/buy` | Private | Buy shares with virtual cash |
+| POST | `/api/transactions/sell` | Private | Sell shares from portfolio |
+| GET | `/api/transactions` | Private | Transaction history (paginated) |
+
+### Portfolio
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| GET | `/api/portfolio` | Private | Holdings + live valuation summary |
+| GET | `/api/portfolio/performance` | Private | Daily account value time series |
+
+### Watchlist
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| GET | `/api/watchlist` | Private | User watchlist |
+| POST | `/api/watchlist/:stockId` | Private | Add stock to watchlist |
+| DELETE | `/api/watchlist/:stockId` | Private | Remove from watchlist |
+
+### Admin
+
+| Method | Endpoint | Access | Description |
+| --- | --- | --- | --- |
+| GET | `/api/admin/users` | Admin | List all users (search, paginate) |
+| GET | `/api/admin/users/:id` | Admin | User detail with portfolio + transactions |
+| PUT | `/api/admin/users/:id` | Admin | Edit user (name, role, cash, contact) |
+| DELETE | `/api/admin/users/:id` | Admin | Deactivate user |
+| GET | `/api/admin/stats` | Admin | Platform-wide stats |
+
+All private routes require `Authorization: Bearer <token>` header.
+
+---
+
+## 📄 Environment Variables
+
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://127.0.0.1:27017/sbstocks
+JWT_SECRET=your_secret_here
+JWT_EXPIRES_IN=7d
+DEFAULT_CASH=300000
+CLIENT_URL=http://localhost:5174
+ADMIN_EMAIL=admin@sbstocks.com
+ADMIN_PASSWORD=admin123
+ADMIN_NAME=SB Stocks Admin
+```
+
+---
 
 ## 📝 Notes
 
-- Stock prices are **illustrative seed data** (plausible, not live quotes) so the app runs fully offline. To use real-time data, point the `Stock` model updates at an API like Alpha Vantage / Finnhub / Polygon.
-- Trades validate before any write and update cash → holdings → history in order, so they stay consistent on a **standalone MongoDB** (no replica set required).
+- Real-time stock prices are fetched from **Yahoo Finance** and cached in MongoDB. The cron job updates all 40+ stocks every 5 minutes.
+- Trades validate before any write and update cash → holdings → history sequentially, so they stay consistent on a **standalone MongoDB** (no replica set required).
 - Sensitive values live in `server/.env` — never commit real secrets.
+- The app uses a dark trading theme by default with an optional light theme toggle.
