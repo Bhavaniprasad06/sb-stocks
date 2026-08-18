@@ -88,11 +88,9 @@ Open **http://localhost:5174** — the Vite dev server proxies `/api` to the bac
 
 ### Default Accounts
 
-| Role | Email | Password |
-| --- | --- | --- |
-| Admin | `admin@sbstocks.com` | `admin123` |
+The admin account is created automatically on server start using the credentials in your `.env` file. Regular users register from the UI and receive **$300,000** in virtual cash.
 
-The admin account is created automatically on server start. Regular users register from the UI and receive **$300,000** in virtual cash.
+> **Note:** Change the admin credentials in `.env` before deploying to production.
 
 ---
 
@@ -163,14 +161,14 @@ All private routes require `Authorization: Bearer <token>` header.
 ```env
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb://127.0.0.1:27017/sbstocks
-JWT_SECRET=your_secret_here
+MONGODB_URI=mongodb://localhost:27017/your_database_name
+JWT_SECRET=generate_a_strong_random_string_here
 JWT_EXPIRES_IN=7d
 DEFAULT_CASH=300000
 CLIENT_URL=http://localhost:5174
-ADMIN_EMAIL=admin@sbstocks.com
-ADMIN_PASSWORD=admin123
-ADMIN_NAME=SB Stocks Admin
+ADMIN_EMAIL=your_admin_email@example.com
+ADMIN_PASSWORD=your_secure_password
+ADMIN_NAME=Admin
 ```
 
 ---
