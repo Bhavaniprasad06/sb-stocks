@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="SB Stocks — practice trading US stocks with virtual money. No risk, real experience." />
+    <title>SB Stocks — Paper Trading Platform</title>
+  </head>
+  <body>
+    <script>
+      // Apply saved theme before paint to prevent flash
+      (function() {
+        var t = localStorage.getItem('sb_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
